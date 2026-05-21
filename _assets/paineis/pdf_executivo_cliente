@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>A Voz da Foto — Plano Executivo · 18 a 31 de Maio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #F5EFE6; font-family: 'Inter', sans-serif; color: #282D29; }
+
+  @page { size: A4 portrait; margin: 0; }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: #F5EFE6;
+    position: relative;
+    overflow: hidden;
+    padding: 22mm 22mm 32mm;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* textura sutil */
+  .page::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(185,76,20,.05) 0, transparent 45%),
+      radial-gradient(circle at 88% 88%, rgba(198,134,67,.06) 0, transparent 45%);
+    pointer-events: none;
+  }
+
+  /* viewfinder */
+  .viewfinder { position: absolute; width: 8mm; height: 8mm; border: 0.6mm solid #B94C14; z-index: 3; }
+  .vf-tl { top: 9mm; left: 9mm; border-right: none; border-bottom: none; }
+  .vf-tr { top: 9mm; right: 9mm; border-left: none; border-bottom: none; }
+  .vf-bl { bottom: 9mm; left: 9mm; border-right: none; border-top: none; }
+  .vf-br { bottom: 9mm; right: 9mm; border-left: none; border-top: none; }
+
+  /* header */
+  .header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10mm; position: relative; z-index: 2;
+    padding-bottom: 4mm; border-bottom: 0.25mm solid rgba(40,45,41,.18);
+  }
+  .brand { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 13pt; color: #B94C14; letter-spacing: .3px; }
+  .meta { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 7pt; color: #282D29; opacity: .55; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  /* footer */
+  .footer {
+    position: absolute; bottom: 10mm; left: 22mm; right: 22mm;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    z-index: 5; padding-top: 4mm; border-top: 0.25mm solid rgba(40,45,41,.18);
+    background: #F5EFE6;
+  }
+  .footer-left { font-family: 'Inter', sans-serif; font-size: 6.5pt; color: #282D29; opacity: .55; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 500; }
+  .stamp { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11pt; color: #B94C14; opacity: .8; }
+  .pagenum { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 10pt; color: #282D29; opacity: .55; }
+
+  /* CAPA */
+  .capa .selo {
+    display: inline-block; padding: 2mm 5mm;
+    background: #B94C14; color: #F5EFE6;
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 8pt;
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 12mm; position: relative; z-index: 2;
+  }
+  .capa h1 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 72pt; line-height: .92; letter-spacing: -2px;
+    color: #282D29; margin-bottom: 8mm; position: relative; z-index: 2;
+  }
+  .capa h1 em { font-style: italic; color: #B94C14; font-weight: 500; }
+  .capa .lede {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 16pt; font-weight: 400; color: #282D29; opacity: .75;
+    margin-bottom: 18mm; max-width: 150mm; line-height: 1.35;
+    position: relative; z-index: 2;
+  }
+  .capa .destinatarios {
+    display: flex; gap: 12mm; margin-bottom: 14mm;
+    position: relative; z-index: 2;
+  }
+  .capa .destinatarios .dest {
+    font-family: 'Inter', sans-serif; font-size: 9pt; line-height: 1.5;
+    color: #282D29;
+  }
+  .capa .destinatarios .dest .label {
+    font-weight: 600; font-size: 7pt; color: #B94C14;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2mm;
+  }
+  .capa .destinatarios .dest strong { font-weight: 600; font-size: 11pt; color: #282D29; }
+
+  .capa .sumario {
+    background: rgba(254,254,254,.6); border-left: 1mm solid #B94C14;
+    padding: 6mm 8mm; max-width: 160mm; position: relative; z-index: 2;
+  }
+  .capa .sumario-titulo {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 7pt;
+    color: #282D29; opacity: .55; letter-spacing: 2.5px; text-transform: uppercase;
+    margin-bottom: 3mm;
+  }
+  .capa .sumario ol { list-style: none; counter-reset: cap; }
+  .capa .sumario li {
+    counter-increment: cap;
+    font-family: 'Cormorant Garamond', serif; font-size: 13pt; font-weight: 500;
+    color: #282D29; padding: 1.8mm 0; display: flex; align-items: baseline; gap: 4mm;
+    border-bottom: 0.2mm dashed rgba(40,45,41,.15);
+  }
+  .capa .sumario li:last-child { border-bottom: none; }
+  .capa .sumario li::before {
+    content: counter(cap, decimal-leading-zero);
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    color: #C68643; font-weight: 600; font-size: 11pt; min-width: 9mm;
+  }
+  .capa .sumario li em { font-style: italic; color: #B94C14; }
+  .capa .sumario li .pg {
+    margin-left: auto; font-family: 'Inter', sans-serif;
+    font-size: 7pt; color: #282D29; opacity: .5; letter-spacing: 1.5px; font-weight: 500;
+  }
+
+  /* SEPARADOR DE SEÇÃO */
+  .sep .sep-inner {
+    position: relative; z-index: 2;
+    margin-top: 30mm;
+  }
+  .sep .num {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 110pt; color: #B94C14; opacity: .25; line-height: 1;
+    letter-spacing: -5px; margin-bottom: 6mm;
+    position: relative; z-index: 2;
+  }
+  .sep .secao-label {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 8pt;
+    color: #B94C14; letter-spacing: 4px; text-transform: uppercase;
+    margin-bottom: 6mm; position: relative; z-index: 2;
+  }
+  .sep h2 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 56pt; line-height: .95; letter-spacing: -1.5px;
+    color: #282D29; margin-bottom: 8mm; position: relative; z-index: 2;
+  }
+  .sep h2 em { font-style: italic; color: #B94C14; }
+  .sep .sep-lede {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 16pt; color: #282D29; opacity: .7; max-width: 150mm;
+    line-height: 1.4; position: relative; z-index: 2;
+  }
+
+  /* TÍTULOS DE PÁGINA INTERNA */
+  .h-eyebrow {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 8pt;
+    color: #B94C14; letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 3mm; position: relative; z-index: 2;
+  }
+  .h-titulo {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 30pt; line-height: 1; letter-spacing: -1px;
+    color: #282D29; margin-bottom: 5mm; position: relative; z-index: 2;
+  }
+  .h-titulo em { font-style: italic; color: #B94C14; }
+  .h-sub {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 11pt; color: #282D29; opacity: .65; margin-bottom: 8mm;
+    position: relative; z-index: 2; line-height: 1.4;
+  }
+
+  /* ZONA VERMELHA - decisões */
+  .red-zone {
+    background: #B94C14; color: #F5EFE6;
+    padding: 6mm 8mm; margin-bottom: 6mm; position: relative; z-index: 2;
+  }
+  .red-zone-titulo {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 14pt; font-weight: 500; margin-bottom: 3mm; letter-spacing: .3px;
+  }
+  .red-zone ol { list-style: none; counter-reset: r; }
+  .red-zone li {
+    counter-increment: r;
+    font-family: 'Inter', sans-serif; font-size: 9pt; line-height: 1.45;
+    padding: 2mm 0; border-bottom: 0.2mm dashed rgba(245,239,230,.25);
+    display: flex; gap: 4mm;
+  }
+  .red-zone li:last-child { border-bottom: none; }
+  .red-zone li::before {
+    content: counter(r);
+    font-family: 'Cormorant Garamond', serif; font-size: 13pt; font-weight: 600;
+    min-width: 6mm; opacity: .85;
+  }
+  .red-zone li strong { font-weight: 600; }
+  .red-zone .who {
+    display: block; font-size: 7.5pt; opacity: .75; font-style: italic; margin-top: 1mm;
+  }
+
+  /* TABELA DE TAREFAS POR DONO */
+  .tarefas-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 4mm; position: relative; z-index: 2;
+  }
+  .tarefas-col {
+    background: #FEFEFE; border: 0.25mm solid rgba(40,45,41,.12);
+    padding: 5mm 5mm; border-radius: 0;
+  }
+  .tarefas-col .col-nome {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 17pt; font-weight: 600; color: #B94C14; margin-bottom: 1mm;
+  }
+  .tarefas-col .col-papel {
+    font-family: 'Inter', sans-serif; font-size: 6.5pt; font-weight: 500;
+    color: #282D29; opacity: .55; letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 4mm;
+  }
+  .tarefas-col ul { list-style: none; }
+  .tarefas-col li {
+    font-family: 'Inter', sans-serif; font-size: 8pt; line-height: 1.45;
+    padding: 2mm 0; border-bottom: 0.2mm solid rgba(40,45,41,.08);
+    display: flex; gap: 2mm;
+  }
+  .tarefas-col li:last-child { border-bottom: none; }
+  .tarefas-col li .id {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600;
+    color: #C68643; font-size: 10pt; min-width: 7mm;
+  }
+  .tarefas-col li .when {
+    display: block; font-size: 6.5pt; color: #B94C14; font-weight: 600;
+    text-transform: uppercase; letter-spacing: .5px; margin-top: 1mm;
+  }
+
+  /* CALENDÁRIO */
+  .calendario {
+    position: relative; z-index: 2;
+  }
+  .cal-week {
+    background: #FEFEFE; border-left: 0.8mm solid #B94C14;
+    padding: 5mm 6mm; margin-bottom: 5mm;
+  }
+  .cal-week-titulo {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 16pt; font-weight: 600; color: #B94C14; margin-bottom: 3mm;
+  }
+  .cal-table {
+    width: 100%; border-collapse: collapse; font-family: 'Inter', sans-serif; font-size: 8pt;
+  }
+  .cal-table th {
+    text-align: left; padding: 2mm 3mm 2mm 0;
+    font-weight: 600; font-size: 7pt; color: #282D29; opacity: .55;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    border-bottom: 0.3mm solid rgba(40,45,41,.2);
+  }
+  .cal-table td {
+    padding: 2.5mm 3mm 2.5mm 0; vertical-align: top;
+    border-bottom: 0.2mm solid rgba(40,45,41,.08);
+    font-size: 8.5pt; line-height: 1.4;
+  }
+  .cal-table tr:last-child td { border-bottom: none; }
+  .cal-table .dia { font-weight: 600; color: #B94C14; font-size: 9pt; white-space: nowrap;}
+  .cal-table .peca { font-weight: 600; color: #282D29; }
+  .cal-table .resp {
+    font-style: italic; color: #282D29; opacity: .65; font-size: 7.5pt;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  /* ROTEIROS */
+  .roteiro {
+    position: relative; z-index: 2;
+  }
+  .roteiro-meta {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4mm;
+    background: rgba(254,254,254,.7); padding: 4mm 5mm;
+    margin-bottom: 5mm; font-family: 'Inter', sans-serif; font-size: 8pt;
+  }
+  .roteiro-meta .label {
+    font-weight: 600; font-size: 6.5pt; color: #B94C14;
+    letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 1mm; display: block;
+  }
+  .roteiro-meta .valor { color: #282D29; line-height: 1.4; }
+  .roteiro-meta .valor em { font-style: italic; color: #B94C14; font-family: 'Cormorant Garamond', serif; font-size: 10pt; }
+
+  .roteiro-bloco {
+    margin-bottom: 3mm; padding: 3mm 5mm;
+    border-left: 0.6mm solid #C68643; background: rgba(254,254,254,.5);
+  }
+  .roteiro-bloco .bloco-label {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 6.5pt;
+    color: #B94C14; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 1.5mm;
+  }
+  .roteiro-bloco .bloco-texto {
+    font-family: 'Cormorant Garamond', serif; font-size: 11.5pt;
+    line-height: 1.35; color: #282D29; font-weight: 500;
+  }
+  .roteiro-bloco .bloco-texto em { font-style: italic; color: #B94C14; }
+  .roteiro-bloco .bloco-nota {
+    font-family: 'Inter', sans-serif; font-size: 7pt;
+    color: #282D29; opacity: .65; margin-top: 1.5mm; line-height: 1.4;
+  }
+
+  .roteiro-copy {
+    background: #282D29; color: #F5EFE6; padding: 4mm 5mm;
+    margin-top: 3mm; position: relative; z-index: 2;
+  }
+  .roteiro-copy .copy-label {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 6.5pt;
+    color: #C68643; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2mm;
+  }
+  .roteiro-copy .copy-texto {
+    font-family: 'Inter', sans-serif; font-size: 8pt; line-height: 1.5;
+    margin-bottom: 2.5mm;
+  }
+  .roteiro-copy .copy-hashtags {
+    font-family: 'Inter', sans-serif; font-size: 7pt; color: #C68643;
+    line-height: 1.45; opacity: .9;
+  }
+
+  /* 3 AJUSTES - cards na página */
+  .ajustes-grid {
+    display: flex; flex-direction: column; gap: 4mm;
+    position: relative; z-index: 2;
+  }
+  .ajuste-card {
+    background: #FEFEFE; border-left: 0.8mm solid #B94C14;
+    padding: 5mm 6mm;
+  }
+  .ajuste-card .ajuste-head {
+    display: flex; align-items: baseline; gap: 4mm; margin-bottom: 2mm;
+  }
+  .ajuste-card .ajuste-num {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600;
+    font-size: 22pt; color: #C68643; line-height: 1;
+  }
+  .ajuste-card .ajuste-titulo {
+    font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 17pt;
+    color: #282D29; line-height: 1.05; letter-spacing: -.3px;
+  }
+  .ajuste-card .ajuste-titulo em { font-style: italic; color: #B94C14; font-weight: 500;}
+  .ajuste-card .ajuste-nota {
+    font-family: 'Inter', sans-serif; font-size: 7pt; color: #282D29; opacity: .55;
+    letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500; margin-top: 1mm;
+  }
+  .ajuste-card .ajuste-body {
+    font-family: 'Inter', sans-serif; font-size: 9pt; line-height: 1.55;
+    color: #282D29; margin-top: 2mm;
+  }
+  .ajuste-card .ajuste-body strong { color: #B94C14; font-weight: 600; }
+
+  /* PARÁGRAFO CORPO PADRÃO */
+  .corpo p {
+    font-family: 'Inter', sans-serif; font-size: 9.5pt; line-height: 1.55;
+    color: #282D29; margin-bottom: 3mm; position: relative; z-index: 2;
+  }
+  .corpo p strong { font-weight: 600; color: #B94C14; }
+  .corpo h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 18pt; font-weight: 600;
+    color: #282D29; margin-bottom: 3mm; margin-top: 6mm; letter-spacing: -.3px;
+    position: relative; z-index: 2;
+  }
+  .corpo h3 em { font-style: italic; color: #B94C14; }
+
+  /* RITUAL */
+  .ritual {
+    background: #282D29; color: #F5EFE6; padding: 6mm 8mm;
+    position: relative; z-index: 2; margin-top: 6mm;
+  }
+  .ritual-label {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 7pt;
+    color: #C68643; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 3mm;
+  }
+  .ritual-text {
+    font-family: 'Cormorant Garamond', serif; font-size: 14pt;
+    line-height: 1.5; font-weight: 400;
+  }
+  .ritual-text em { font-style: italic; color: #C68643; }
+  .ritual-text strong { color: #C68643; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 1 · CAPA + SUMÁRIO                                             -->
+<!-- =================================================================== -->
+<div class="page capa">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto</span>
+    <span class="meta">Plano executivo · Maio 2026</span>
+  </div>
+
+  <div class="selo">Confidencial · Ana · Isa · Leandro</div>
+  <h1>Plano de<br><em>quinze dias.</em></h1>
+  <p class="lede">Tudo o que precisa acontecer entre 18 e 31 de maio pra destravar o projeto. Quem decide, quem executa, quem publica — e quando.</p>
+
+  <div class="destinatarios">
+    <div class="dest">
+      <div class="label">Decide</div>
+      <strong>Ana Pillar</strong><br>Estratégia + operação
+    </div>
+    <div class="dest">
+      <div class="label">Autoriza</div>
+      <strong>Isa</strong><br>Rosto + estética
+    </div>
+    <div class="dest">
+      <div class="label">Executa</div>
+      <strong>Leandro</strong><br>Design + edição + LP
+    </div>
+  </div>
+
+  <div class="sumario">
+    <div class="sumario-titulo">Neste documento</div>
+    <ol>
+      <li>Painel da <em>semana</em> · tarefas por dono <span class="pg">pg. 02</span></li>
+      <li>Calendário <em>editorial</em> · 2 semanas <span class="pg">pg. 03</span></li>
+      <li>Roteiros dos próximos <em>reels</em> <span class="pg">pg. 04</span></li>
+      <li>Três <em>ajustes</em> pros próximos vídeos <span class="pg">pg. 08</span></li>
+      <li>Resumo + ritual da <em>semana</em> <span class="pg">pg. 10</span></li>
+    </ol>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · vozdafoto.com.br</div>
+    <div class="stamp">— ler é decidir.</div>
+    <div class="pagenum">01</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 2 · PAINEL DA SEMANA (TAREFAS)                                 -->
+<!-- =================================================================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 01 Painel</span>
+    <span class="meta">Sprint · 18 a 22 de maio</span>
+  </div>
+
+  <div class="h-eyebrow">Sprint de 5 dias · desbloqueio</div>
+  <h2 class="h-titulo">Painel da <em>semana.</em></h2>
+  <p class="h-sub">Cada tarefa tem dono único, prazo e o que destrava a próxima. Atualizado toda segunda 9h.</p>
+
+  <div class="red-zone">
+    <div class="red-zone-titulo">Zona vermelha · 2 decisões da Ana até segunda</div>
+    <ol>
+      <li><div><strong>Preço final do Café com Foto</strong> — R$ 53 ou R$ 97?<span class="who">trava LP, copy de venda e ads</span></div></li>
+      <li><div><strong>Data + local do 1º Café</strong> em Brasília<span class="who">ads não convertem sem data marcada</span></div></li>
+    </ol>
+  </div>
+
+  <div style="background: rgba(254,254,254,.6); border-left: 0.8mm solid #C68643; padding: 3mm 5mm; margin-bottom: 5mm; font-family: 'Inter', sans-serif; font-size: 8.5pt; line-height: 1.45; position: relative; z-index: 2;">
+    <strong style="color: #C68643; font-weight: 600;">Já resolvido:</strong> WhatsApp oficial <strong>+55 61 9621-8844</strong> já implantado em todos os CTAs da LP. Instagram do footer atualizado pra <strong>@eu.avozdafoto</strong>.
+  </div>
+
+  <div class="tarefas-grid">
+    <!-- LEANDRO -->
+    <div class="tarefas-col">
+      <div class="col-nome">Leandro</div>
+      <div class="col-papel">Execução técnica</div>
+      <ul>
+        <li><span class="id">L1</span><div>WhatsApp oficial na LP ✓<span class="when">Concluído 13/05</span></div></li>
+        <li><span class="id">L2</span><div>Instagram do footer da LP ✓<span class="when">Concluído 15/05</span></div></li>
+        <li><span class="id">L3</span><div>Subir vídeos no GDrive da Voz<span class="when">Seg à noite</span></div></li>
+        <li><span class="id">L4</span><div>Corrigir @ nos C16-C18<span class="when">Terça</span></div></li>
+        <li><span class="id">L5</span><div>Publicar fila diária (1/dia)<span class="when">Ter–Sex</span></div></li>
+        <li><span class="id">L6</span><div>og:image novo na LP<span class="when">Quando I1 sair</span></div></li>
+      </ul>
+    </div>
+
+    <!-- ANA -->
+    <div class="tarefas-col">
+      <div class="col-nome">Ana</div>
+      <div class="col-papel">Decisões + operação</div>
+      <ul>
+        <li><span class="id">A1</span><div>Decidir preço do Café<span class="when">Segunda</span></div></li>
+        <li><span class="id">A2</span><div>Aprovar copies dos 3 reels<span class="when">Terça</span></div></li>
+        <li><span class="id">A3</span><div>Data + local do 1º Café<span class="when">Quarta</span></div></li>
+        <li><span class="id">A4</span><div>Aprovar legendas C16–C18<span class="when">Quarta</span></div></li>
+        <li><span class="id">A5</span><div>Criar Highlights pendentes no IG (Sobre, Lendo, Manifesto)<span class="when">Quinta</span></div></li>
+        <li><span class="id">A6</span><div>20 perfis-referência pra Isa<span class="when">Sexta</span></div></li>
+      </ul>
+    </div>
+
+    <!-- ISA -->
+    <div class="tarefas-col">
+      <div class="col-nome">Isa</div>
+      <div class="col-papel">Rosto + estética</div>
+      <ul>
+        <li><span class="id">I1</span><div>Marcar ensaio autoral próprio<span class="when">Terça</span></div></li>
+        <li><span class="id">I2</span><div>Gravar 3 reels novos (1/dia)<span class="when">Qua–Sex</span></div></li>
+        <li><span class="id">I3</span><div>Aprovar estética C16–C18<span class="when">Quarta</span></div></li>
+        <li><span class="id">I4</span><div>Aprovar foto pro og:image<span class="when">Quinta</span></div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— cada um com sua coluna.</div>
+    <div class="pagenum">02</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 3 · CALENDÁRIO EDITORIAL (2 SEMANAS)                           -->
+<!-- =================================================================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 02 Calendário</span>
+    <span class="meta">18 a 31 de maio</span>
+  </div>
+
+  <div class="h-eyebrow">Calendário editorial · 14 dias</div>
+  <h2 class="h-titulo">O que vai pro <em>feed</em>, quando.</h2>
+  <p class="h-sub">Frequência alvo: 1 reel + 1 carrossel + stories diários. Adaptável conforme aprovações da Ana e gravações da Isa.</p>
+
+  <div class="calendario">
+    <div style="background: rgba(254,254,254,.6); border-left: 0.8mm solid #C68643; padding: 3mm 5mm; margin-bottom: 5mm; font-family: 'Inter', sans-serif; font-size: 8pt; line-height: 1.5;">
+      <strong style="color: #C68643;">Já publicados no @eu.avozdafoto:</strong> C01, C02, C03, C04, C05, C06, C07, C08. Stories Sobre/Lendo/Manifesto no ar (faltam virar Highlights).<br>
+      <strong style="color: #C68643;">Pendentes:</strong> 10 carrosséis (C09–C18) + 3 reels editados + 3 sugestões de reels novos.
+    </div>
+
+    <!-- SEMANA 1 -->
+    <div class="cal-week">
+      <div class="cal-week-titulo">Semana 1 · 18–22 de maio</div>
+      <table class="cal-table">
+        <thead>
+          <tr><th style="width:18%">Dia</th><th style="width:30%">Peça</th><th style="width:36%">Conteúdo</th><th style="width:16%">Responsável</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="dia">Seg 18</td><td class="peca">Carrossel · C09</td><td>Quiz · Você Sabe Ler uma Foto</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Ter 19</td><td class="peca">Reel 01</td><td>Dorothea Lange · A Mãe Migrante</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Qua 20</td><td class="peca">Reel 02</td><td>O Beijo que Parou o Tempo</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Qua 20</td><td class="peca">Carrossel · C10</td><td>Antes & Depois · 3 Leituras</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Qui 21</td><td class="peca">Reel 03</td><td>Encerramento (vinheta da marca, versão creme)</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Sex 22</td><td class="peca">Carrossel · C11</td><td>Erros que Matam Fotos Boas</td><td class="resp">Leandro publica</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SEMANA 2 -->
+    <div class="cal-week">
+      <div class="cal-week-titulo">Semana 2 · 25–31 de maio</div>
+      <table class="cal-table">
+        <thead>
+          <tr><th>Dia</th><th>Peça</th><th>Conteúdo</th><th>Responsável</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="dia">Seg 25</td><td class="peca">Carrossel · C12</td><td>IA vs Foto Real</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Ter 26</td><td class="peca">Reel novo 04</td><td>Vermeer · Moça com Brinco de Pérola (Isa grava)</td><td class="resp">Isa grava · Leandro edita</td></tr>
+          <tr><td class="dia">Qua 27</td><td class="peca">Carrossel · C13</td><td>Van Gogh · A Noite Estrelada</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Qui 28</td><td class="peca">Story · ensaio Isa</td><td>Behind-the-scenes do ensaio autoral (I1)</td><td class="resp">Isa</td></tr>
+          <tr><td class="dia">Sex 29</td><td class="peca">Carrossel · C16</td><td>A Primeira Foto da História (Niépce)</td><td class="resp">Leandro publica</td></tr>
+          <tr><td class="dia">Sáb 30</td><td class="peca">Carrossel novo</td><td>1º Café com Foto · convite + data + link</td><td class="resp">Ana copy · Leandro arte</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— frequência vence perfeição.</div>
+    <div class="pagenum">03</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 4 · ROTEIRO REEL 01 · DOROTHEA LANGE                           -->
+<!-- =================================================================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 03 Roteiros · Reel 01</span>
+    <span class="meta">Dorothea Lange · 30s</span>
+  </div>
+
+  <div class="h-eyebrow">Reel 01 · Lendo a Foto</div>
+  <h2 class="h-titulo">A mãe de <em>Dorothea Lange.</em></h2>
+  <p class="h-sub">Status: editado e exportado. Pendente: publicar terça-feira (19/05). Aguardando copy da Ana.</p>
+
+  <div class="roteiro">
+    <div class="roteiro-meta">
+      <div><span class="label">Foto-âncora</span><div class="valor"><em>Migrant Mother</em>, Dorothea Lange, 1936</div></div>
+      <div><span class="label">Duração</span><div class="valor">~30 segundos</div></div>
+      <div><span class="label">Setup</span><div class="valor">A — luz de janela, talking head</div></div>
+      <div><span class="label">Take master</span><div class="valor">take2_completo_55s.mp4</div></div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Gancho · 0–3s</div>
+      <div class="bloco-texto">"Essa é a foto mais famosa do século XX. <em>E você nunca reparou nas mãos dela.</em>"</div>
+      <div class="bloco-nota">Câmera fechada no rosto da Isa. Cut seco pro B-roll da foto entrando.</div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Camada 1 · 3–14s · o óbvio</div>
+      <div class="bloco-texto">"A primeira coisa que todo mundo vê é o rosto da mãe. Preocupado, distante. É a expressão que virou símbolo da grande depressão americana."</div>
+      <div class="bloco-nota">B-roll: close no rosto da mãe na foto. Movimento lento de zoom.</div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Camada 2 · 14–25s · o invisível</div>
+      <div class="bloco-texto">"Mas <em>olha aqui.</em> Olha pras mãos. Ela não está abraçando os filhos — ela está se segurando. Os dedos cravados no próprio rosto. Ela não olha pras crianças, ela olha pra fora, pra um futuro que ela nem sabe se existe."</div>
+      <div class="bloco-nota">B-roll: pan lento das mãos. Esse é o momento-aula — o "ah!".</div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Payoff · 25–30s · a lei</div>
+      <div class="bloco-texto">"Fotografar não é registrar o que tá ali. <em>É mostrar o que não dá pra dizer.</em>"</div>
+      <div class="bloco-nota">Volta pra Isa. Cut pro card de encerramento.</div>
+    </div>
+
+    <div class="roteiro-copy">
+      <div class="copy-label">Copy do post · pendente aprovação Ana</div>
+      <div class="copy-texto">
+        Todo mundo conhece essa foto. Quase ninguém leu ela.<br><br>
+        A Migrant Mother, de Dorothea Lange (1936), virou ícone da Grande Depressão. Mas o que faz dela uma obra-prima não é o rosto da mãe — é o que está nas mãos.<br><br>
+        Esse é o tipo de leitura que ensino no Café com Foto, em Brasília. Link na bio.
+      </div>
+      <div class="copy-hashtags">#avozdafoto #dorothealange #fotografia #leraimagem #linguagemvisual #cafecomfoto #migrantmother #fotodocumental</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— olha as mãos.</div>
+    <div class="pagenum">04</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 5 · ROTEIRO REEL 02 · O BEIJO                                  -->
+<!-- =================================================================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 03 Roteiros · Reel 02</span>
+    <span class="meta">O Beijo · 32s</span>
+  </div>
+
+  <div class="h-eyebrow">Reel 02 · Lendo a Foto</div>
+  <h2 class="h-titulo">O beijo que <em>parou o tempo.</em></h2>
+  <p class="h-sub">Status: editado e exportado. Pendente: publicar quarta-feira (20/05). Aguardando copy da Ana.</p>
+
+  <div class="roteiro">
+    <div class="roteiro-meta">
+      <div><span class="label">Foto-âncora</span><div class="valor"><em>V-J Day in Times Square</em>, Alfred Eisenstaedt, 1945</div></div>
+      <div><span class="label">Duração</span><div class="valor">~32 segundos</div></div>
+      <div><span class="label">Setup</span><div class="valor">A — luz de janela, talking head + B-roll</div></div>
+      <div><span class="label">Take master</span><div class="valor">Montagem · gancho 16s + camadas separadas</div></div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Gancho · 0–3s</div>
+      <div class="bloco-texto">"Todo mundo acha que essa foto é romântica. <em>E ela não é.</em>"</div>
+      <div class="bloco-nota">Foto em tela cheia, depois cut pra Isa.</div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Camada 1 · 3–14s · o contexto</div>
+      <div class="bloco-texto">"14 de agosto de 1945. Times Square, Nova York. A guerra acabou exatamente três horas atrás. E um marinheiro bêbado está andando pela rua, beijando todas as mulheres que passam."</div>
+      <div class="bloco-nota">B-roll: foto em tela cheia. Pequenas pausas no marinheiro.</div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Camada 2 · 14–24s · o invisível</div>
+      <div class="bloco-texto">"<em>Olha bem pro corpo dela.</em> O pulso pressionado. A mão dele segurando o pescoço dela. Ela nunca disse sim."</div>
+      <div class="bloco-nota">B-roll: zoom progressivo no pulso da moça, depois no pescoço.</div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Payoff · 24–32s · a virada</div>
+      <div class="bloco-texto">"A foto virou ícone da paz. <em>Mas a moça ficou 67 anos falando que aquilo foi um assédio.</em>"</div>
+      <div class="bloco-nota">Volta pra Isa. Pausa antes do card final.</div>
+    </div>
+
+    <div class="roteiro-copy">
+      <div class="copy-label">Copy do post · pendente aprovação Ana</div>
+      <div class="copy-texto">
+        A foto mais romântica do século não é uma foto romântica.<br><br>
+        V-J Day in Times Square, de Alfred Eisenstaedt, virou símbolo do fim da Segunda Guerra. Mas Greta Friedman, a moça beijada, passou 67 anos contando que aquilo foi um assédio. Aprender a ler uma foto é aprender a ver o que está escondido no corpo dela.<br><br>
+        Café com Foto · Brasília · link na bio.
+      </div>
+      <div class="copy-hashtags">#avozdafoto #eisenstaedt #vjday #fotografia #leraimagem #fotojornalismo #cafecomfoto #linguagemvisual</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— ela nunca disse sim.</div>
+    <div class="pagenum">05</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 6 · REEL 03 · ENCERRAMENTO + ROTEIROS DOS NOVOS                -->
+<!-- =================================================================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 03 Roteiros · Reel 03 + futuros</span>
+    <span class="meta">Encerramento + próximos</span>
+  </div>
+
+  <div class="h-eyebrow">Reel 03 · Vinheta</div>
+  <h2 class="h-titulo">Encerramento <em>· vinheta da marca.</em></h2>
+  <p class="h-sub">Status: editado em 3 versões (creme, preto, verde IDV). Pendente: publicar quinta (21/05). Definir qual versão entra.</p>
+
+  <div class="roteiro">
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Função no perfil</div>
+      <div class="bloco-texto">Vinheta de 2 segundos que entra <em>no fim de todo reel</em> a partir de agora. Construção de marca. Pavlov visual.</div>
+      <div class="bloco-nota">Recomendação Leandro: começar pela versão CREME (mais editorial, alinhada com a IDV). Preto e verde ficam pra contextos específicos.</div>
+    </div>
+
+    <div class="roteiro-bloco">
+      <div class="bloco-label">Decisão necessária</div>
+      <div class="bloco-texto">Ana e Isa: olhem as 3 versões na pasta <em>Videos editados pelo Claude/Encerramento/</em> e escolham a oficial.</div>
+    </div>
+  </div>
+
+  <h3 style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22pt; color: #B94C14; margin-top: 12mm; margin-bottom: 4mm; font-weight: 600; position: relative; z-index: 2;">Reels novos da Isa · sugestões de tema</h3>
+
+  <div class="corpo">
+    <p>Para gravar entre <strong>quarta 20 e sexta 29</strong>. Seguir os 3 ajustes da pg. 08. Mandar bruto pro Leandro editar.</p>
+  </div>
+
+  <div class="roteiro-bloco">
+    <div class="bloco-label">Reel 04 · sugestão</div>
+    <div class="bloco-texto">"<em>Vermeer</em> · Moça com Brinco de Pérola — por que ela olha pra você, não pro pintor."</div>
+    <div class="bloco-nota">Tema rico, conecta com o C07 já publicado. Estrutura: gancho + 2 camadas + payoff. ~30s.</div>
+  </div>
+
+  <div class="roteiro-bloco">
+    <div class="bloco-label">Reel 05 · sugestão</div>
+    <div class="bloco-texto">"<em>Fan Ho</em> · o vazio que fala — metade da foto é nada. E essa metade é o que faz a foto."</div>
+    <div class="bloco-nota">Conecta com o C08. Foto pra mostrar: Approaching Shadow, 1954. ~30s.</div>
+  </div>
+
+  <div class="roteiro-bloco">
+    <div class="bloco-label">Reel 06 · sugestão</div>
+    <div class="bloco-texto">"Por que <em>foto antiga</em> emociona mais que foto de hoje? — não é nostalgia, é decisão estética."</div>
+    <div class="bloco-nota">Conecta com o C17 (P&B vs Cor) que sai sexta. Reforça o tema. ~30s.</div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— a vinheta cria o Pavlov.</div>
+    <div class="pagenum">06</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 7 · SEPARADOR · 3 AJUSTES                                      -->
+<!-- =================================================================== -->
+<div class="page sep">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto</span>
+    <span class="meta">04 · Ajustes técnicos</span>
+  </div>
+
+  <div class="sep-inner">
+    <div class="num">04</div>
+    <div class="secao-label">Capítulo quatro · pra Isa</div>
+    <h2>Três ajustes,<br><em>uma virada.</em></h2>
+    <p class="sep-lede">Nada técnico, nada caro. Só três escolhas conscientes que separam um vídeo amador de um vídeo editorial — o nosso padrão.</p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— escolhe um por semana.</div>
+    <div class="pagenum">07</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 8 · 3 AJUSTES                                                  -->
+<!-- =================================================================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 04 Três Ajustes</span>
+    <span class="meta">Pra Isa · gravações</span>
+  </div>
+
+  <div class="h-eyebrow">Como melhorar os próximos vídeos</div>
+  <h2 class="h-titulo">Os <em>três ajustes,</em> em uma página.</h2>
+  <p class="h-sub">Versão resumo. Detalhe completo de cada item nas páginas seguintes do documento original (entregue à parte).</p>
+
+  <div class="ajustes-grid">
+
+    <div class="ajuste-card">
+      <div class="ajuste-head">
+        <div class="ajuste-num">01</div>
+        <div>
+          <div class="ajuste-titulo">A <em>luz</em> faz quase tudo</div>
+          <div class="ajuste-nota">O que mais muda o resultado</div>
+        </div>
+      </div>
+      <div class="ajuste-body">
+        Gravar <strong>virada pra janela</strong>, nunca de costas. Lateral também funciona — cria sombra editorial. Evitar luz de teto direta: achata o rosto e amarela a pele. <strong>Horário ideal:</strong> 9h–11h ou 16h–18h.
+      </div>
+    </div>
+
+    <div class="ajuste-card">
+      <div class="ajuste-head">
+        <div class="ajuste-num">02</div>
+        <div>
+          <div class="ajuste-titulo">Câmera <em>na altura dos olhos</em></div>
+          <div class="ajuste-nota">Pare de cortar o queixo</div>
+        </div>
+      </div>
+      <div class="ajuste-body">
+        Câmera <strong>nunca de baixo</strong>. Deixa um palmo de "ar" acima da cabeça. Enquadra <strong>ombros, não só rosto</strong>. Marca uma fita no chão pra achar a posição certa toda vez.
+      </div>
+    </div>
+
+    <div class="ajuste-card">
+      <div class="ajuste-head">
+        <div class="ajuste-num">03</div>
+        <div>
+          <div class="ajuste-titulo">O <em>B-roll</em> da foto comentada</div>
+          <div class="ajuste-nota">O pulo do gato · transforma o reel</div>
+        </div>
+      </div>
+      <div class="ajuste-body">
+        Em vez de só falar sobre a foto, gravar <strong>em separado um close da tela</strong> (celular ou notebook) passando o dedo, dando zoom em detalhes. Em <strong>câmera lenta (slo-mo / 0.5x)</strong>. Eu intercalo na edição. Vira "professora <strong>mostrando</strong>", não só "professora falando".
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ritual" style="margin-top: 8mm;">
+    <div class="ritual-label">Checklist de 60 segundos · antes do REC</div>
+    <div class="ritual-text">
+      Janela aberta, luz de teto desligada. Câmera na altura dos olhos, fita marcada no chão. Ombros visíveis, palmo de ar acima da cabeça. Celular pronto pro B-roll, modo slo-mo ligado. <em>Manda bruto pro Leandro — sem cortar nada.</em>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— mostrar, não descrever.</div>
+    <div class="pagenum">08</div>
+  </div>
+</div>
+
+<!-- =================================================================== -->
+<!-- PÁGINA 9 · RITUAL + ENCERRAMENTO                                      -->
+<!-- =================================================================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div><div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div><div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto</span>
+    <span class="meta">05 · Ritual + próximos passos</span>
+  </div>
+
+  <div class="h-eyebrow">Ritual operacional</div>
+  <h2 class="h-titulo">Como a gente <em>mantém o ritmo.</em></h2>
+  <p class="h-sub">Três encontros curtos por semana. Áudio no WhatsApp basta. O importante é não deixar tarefa morrer no chat.</p>
+
+  <div class="corpo">
+    <h3>Três checkpoints semanais</h3>
+    <p><strong>Segunda · 9h</strong> — Leandro manda o painel atualizado da semana no grupo. Áudio explicando o que cada uma destrava.</p>
+    <p><strong>Quarta · 18h</strong> — Áudio rápido das três: o que andou, o que travou. Sem texto longo.</p>
+    <p><strong>Sexta · 17h</strong> — Fechamento da semana + montagem do painel da próxima. Ana confirma decisões; Leandro atualiza o documento.</p>
+
+    <h3>Como Ana e Isa <em>recebem</em> o painel</h3>
+    <p>Só o Leandro mexe no documento. Ana e Isa <strong>recebem print no WhatsApp toda segunda</strong>. Não precisa abrir Notion, planilha, nada. O documento mora aqui — vocês olham, opinam por áudio, e ele atualiza.</p>
+
+    <h3>Sinais de alerta · não pode acontecer</h3>
+    <p><strong>Coisa parada na zona vermelha por mais de 48h.</strong> Se uma decisão da Ana ficar pendente além de quarta, a semana toda atrasa. Leandro cobra explicitamente.</p>
+    <p><strong>Vídeo da Isa esperando edição por mais de 72h.</strong> Cadência só funciona se o ciclo gravação → edição → publicação fechar em 3 dias.</p>
+    <p><strong>Mais de 4 dias sem postar nada.</strong> Algoritmo do Instagram esfria. Mesmo um story do bastidor vale.</p>
+  </div>
+
+  <div class="ritual">
+    <div class="ritual-label">Última coisa · pra todas as três</div>
+    <div class="ritual-text">
+      A Voz da Foto não vai virar grande porque a gente vai postar uma peça perfeita.<br>
+      Vai virar grande porque a gente vai postar uma <em>peça boa, toda semana, por dois anos.</em><br>
+      <strong>Frequência vence perfeição. Sempre.</strong>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · vozdafoto.com.br</div>
+    <div class="stamp">— ler é decidir.</div>
+    <div class="pagenum">09</div>
+  </div>
+</div>
+
+</body>
+</html>

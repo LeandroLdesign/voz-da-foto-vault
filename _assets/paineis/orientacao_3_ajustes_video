@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>3 ajustes pros próximos vídeos — A Voz da Foto</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #F5EFE6; font-family: 'Inter', sans-serif; color: #282D29; }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  /* Página A4 retrato em mm. Usar mm garante que o Chrome respeite o tamanho real */
+  .page {
+    width: 210mm;
+    height: 297mm;
+    background: #F5EFE6;
+    position: relative;
+    overflow: hidden;
+    padding: 22mm 22mm 32mm;
+    page-break-after: always;
+    page-break-inside: avoid;
+  }
+  .page:last-child { page-break-after: auto; }
+
+  /* textura editorial sutil */
+  .page::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 18% 12%, rgba(185,76,20,.05) 0, transparent 45%),
+      radial-gradient(circle at 88% 88%, rgba(198,134,67,.06) 0, transparent 45%);
+    pointer-events: none;
+  }
+
+  /* cantos viewfinder */
+  .viewfinder { position: absolute; width: 8mm; height: 8mm; border: 0.6mm solid #B94C14; z-index: 3; }
+  .vf-tl { top: 9mm; left: 9mm; border-right: none; border-bottom: none; }
+  .vf-tr { top: 9mm; right: 9mm; border-left: none; border-bottom: none; }
+  .vf-bl { bottom: 9mm; left: 9mm; border-right: none; border-top: none; }
+  .vf-br { bottom: 9mm; right: 9mm; border-left: none; border-top: none; }
+
+  /* header geral */
+  .header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10mm; position: relative; z-index: 2;
+    padding-bottom: 4mm; border-bottom: 0.25mm solid rgba(40,45,41,.18);
+  }
+  .brand { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 500; font-size: 13pt; color: #B94C14; letter-spacing: .3px; }
+  .meta { font-family: 'Inter', sans-serif; font-weight: 500; font-size: 7pt; color: #282D29; opacity: .55; letter-spacing: 1.5px; text-transform: uppercase; }
+
+  /* footer geral */
+  .footer {
+    position: absolute; bottom: 10mm; left: 22mm; right: 22mm;
+    display: flex; justify-content: space-between; align-items: flex-end;
+    z-index: 5; padding-top: 4mm; border-top: 0.25mm solid rgba(40,45,41,.18);
+    background: #F5EFE6;
+  }
+  .footer-left { font-family: 'Inter', sans-serif; font-size: 6.5pt; color: #282D29; opacity: .55; letter-spacing: 1.2px; text-transform: uppercase; font-weight: 500; }
+  .stamp { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11pt; color: #B94C14; opacity: .8; }
+  .pagenum { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 10pt; color: #282D29; opacity: .55; }
+
+  /* ===== CAPA ===== */
+  .capa { display: flex; flex-direction: column; }
+  .capa .eyebrow {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 8pt;
+    color: #B94C14; letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 6mm; position: relative; z-index: 2;
+  }
+  .capa h1 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 64pt; line-height: .92; letter-spacing: -1.5px;
+    color: #282D29; margin-bottom: 7mm; position: relative; z-index: 2;
+  }
+  .capa h1 em { font-style: italic; color: #B94C14; font-weight: 500; }
+  .capa .lede {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 15pt; font-weight: 400; color: #282D29; opacity: .7;
+    margin-bottom: 16mm; max-width: 145mm; line-height: 1.35;
+    position: relative; z-index: 2;
+  }
+  .capa .indice {
+    background: rgba(254,254,254,.6); border-left: 1mm solid #B94C14;
+    padding: 8mm 10mm; max-width: 130mm; position: relative; z-index: 2;
+  }
+  .capa .indice-titulo {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 7pt;
+    color: #282D29; opacity: .55; letter-spacing: 2.5px; text-transform: uppercase;
+    margin-bottom: 4mm;
+  }
+  .capa .indice ol { list-style: none; counter-reset: cap; }
+  .capa .indice li {
+    counter-increment: cap;
+    font-family: 'Cormorant Garamond', serif; font-size: 14pt; font-weight: 500;
+    color: #282D29; padding: 2mm 0; display: flex; align-items: baseline; gap: 4mm;
+    border-bottom: 0.2mm dashed rgba(40,45,41,.18);
+  }
+  .capa .indice li:last-child { border-bottom: none; }
+  .capa .indice li::before {
+    content: counter(cap, decimal-leading-zero);
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    color: #C68643; font-weight: 600; font-size: 12pt; min-width: 9mm;
+  }
+  .capa .indice li em { font-style: italic; color: #B94C14; }
+  .capa .indice li .pg {
+    margin-left: auto; font-family: 'Inter', sans-serif;
+    font-size: 7pt; color: #282D29; opacity: .5; letter-spacing: 1.5px; font-weight: 500;
+  }
+  .capa .autor {
+    margin-top: 14mm; font-family: 'Inter', sans-serif; font-size: 8pt;
+    color: #282D29; opacity: .7; letter-spacing: 1px; line-height: 1.7;
+    position: relative; z-index: 2;
+  }
+  .capa .autor strong { font-weight: 600; color: #B94C14; }
+
+  /* ===== PÁGINAS DE CONTEÚDO ===== */
+  .num-grande {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 72pt; color: #C68643; opacity: .35;
+    line-height: 1; letter-spacing: -3px; margin-bottom: -6mm;
+    position: relative; z-index: 2;
+  }
+  .ajuste-eyebrow {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 7pt;
+    color: #B94C14; letter-spacing: 2.5px; text-transform: uppercase;
+    margin-bottom: 3mm; position: relative; z-index: 2;
+  }
+  .ajuste-titulo {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 32pt; line-height: 1; letter-spacing: -1px;
+    color: #282D29; margin-bottom: 3mm; position: relative; z-index: 2;
+  }
+  .ajuste-titulo em { font-style: italic; color: #B94C14; font-weight: 500; }
+  .ajuste-sub {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 11pt; color: #282D29; opacity: .65; margin-bottom: 6mm;
+    position: relative; z-index: 2; line-height: 1.4;
+  }
+
+  /* corpo */
+  .corpo p {
+    font-family: 'Inter', sans-serif; font-size: 9.5pt; line-height: 1.55;
+    color: #282D29; margin-bottom: 3.5mm; position: relative; z-index: 2;
+  }
+  .corpo p strong { font-weight: 600; color: #B94C14; }
+  .corpo .destaque {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 13pt; font-weight: 500; color: #282D29;
+    border-left: 0.8mm solid #B94C14; padding: 1mm 0 1mm 5mm;
+    margin: 5mm 0 5mm; line-height: 1.35;
+  }
+
+  /* checklist */
+  .check {
+    background: #FEFEFE; border: 0.25mm solid rgba(40,45,41,.12);
+    padding: 4mm 6mm; margin-top: 4mm; position: relative; z-index: 2;
+  }
+  .check-titulo {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-weight: 600; font-size: 10pt; color: #B94C14;
+    margin-bottom: 2mm; letter-spacing: .3px;
+  }
+  .check ul { list-style: none; }
+  .check li {
+    font-family: 'Inter', sans-serif; font-size: 8pt; line-height: 1.45;
+    padding: 1mm 0; color: #282D29; display: flex; gap: 3mm;
+    border-bottom: 0.2mm solid rgba(40,45,41,.08);
+  }
+  .check li:last-child { border-bottom: none; }
+  .check li::before {
+    content: '✓'; color: #B94C14; font-weight: 700; font-size: 10pt;
+    min-width: 4mm; line-height: 1.4;
+  }
+  .check li.no::before { content: '✕'; color: #C68643; opacity: .75; }
+  .check li strong { font-weight: 600; color: #282D29; }
+
+  /* esquema visual SVG */
+  .esquema {
+    margin: 4mm 0; background: #FEFEFE;
+    border: 0.25mm solid rgba(40,45,41,.12);
+    padding: 5mm; position: relative; z-index: 2;
+    text-align: center;
+  }
+  .esquema-titulo {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 6.5pt;
+    color: #B94C14; letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 4mm;
+  }
+  .esquema-legenda {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 9pt; color: #282D29; opacity: .7; margin-top: 4mm;
+  }
+  svg { width: 100%; max-width: 130mm; height: auto; display: block; margin: 0 auto; }
+
+  /* página final */
+  .final h1 {
+    font-family: 'Cormorant Garamond', serif; font-weight: 500;
+    font-size: 42pt; line-height: 1; letter-spacing: -1px;
+    color: #282D29; margin-bottom: 5mm; position: relative; z-index: 2;
+  }
+  .final h1 em { font-style: italic; color: #B94C14; }
+  .final .resumo {
+    margin-top: 8mm; display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 4mm; position: relative; z-index: 2;
+  }
+  .final .card {
+    background: #FEFEFE; border-top: 1mm solid #B94C14;
+    padding: 6mm 5mm; min-height: 50mm;
+  }
+  .final .card .n {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 24pt; color: #C68643; font-weight: 600; line-height: 1;
+    margin-bottom: 3mm;
+  }
+  .final .card h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 14pt; font-weight: 600;
+    color: #282D29; line-height: 1.1; margin-bottom: 2.5mm;
+  }
+  .final .card h3 em { font-style: italic; color: #B94C14; }
+  .final .card p {
+    font-family: 'Inter', sans-serif; font-size: 8pt; line-height: 1.5;
+    color: #282D29; opacity: .85;
+  }
+  .final .assinatura {
+    margin-top: 8mm; padding: 7mm 8mm;
+    background: #282D29; color: #F5EFE6; position: relative; z-index: 2;
+  }
+  .final .assinatura-label {
+    font-family: 'Inter', sans-serif; font-weight: 600; font-size: 7pt;
+    color: #C68643; letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 3mm;
+  }
+  .final .assinatura p {
+    font-family: 'Cormorant Garamond', serif; font-size: 12pt;
+    line-height: 1.45; font-weight: 400;
+  }
+  .final .assinatura p em { font-style: italic; color: #C68643; }
+</style>
+</head>
+<body>
+
+<!-- ============================== PÁGINA 1 · CAPA ============================== -->
+<div class="page capa">
+  <div class="viewfinder vf-tl"></div>
+  <div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div>
+  <div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto</span>
+    <span class="meta">Orientação · Pra Isa · Maio 2026</span>
+  </div>
+
+  <div class="eyebrow">Como melhorar os próximos vídeos</div>
+  <h1>Três ajustes,<br><em>uma virada.</em></h1>
+  <p class="lede">Nada técnico, nada caro. Só três escolhas conscientes que separam um vídeo amador de um vídeo editorial — o nosso padrão.</p>
+
+  <div class="indice">
+    <div class="indice-titulo">Neste documento</div>
+    <ol>
+      <li>A <em>luz</em> faz quase tudo <span class="pg">pg. 02</span></li>
+      <li>Câmera <em>na altura dos olhos</em> <span class="pg">pg. 03</span></li>
+      <li>O <em>B-roll</em> da foto comentada <span class="pg">pg. 04</span></li>
+      <li>Resumo + checklist antes de gravar <span class="pg">pg. 05</span></li>
+    </ol>
+  </div>
+
+  <div class="autor">
+    Documento preparado por <strong>Leandro</strong> · estética e edição<br>
+    Em diálogo com <strong>Ana</strong> (operação) e <strong>Isa</strong> (rosto da marca).
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · vozdafoto.com.br</div>
+    <div class="stamp">— ler é decidir.</div>
+  </div>
+</div>
+
+<!-- ============================== PÁGINA 2 · LUZ ============================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div>
+  <div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div>
+  <div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 3 Ajustes</span>
+    <span class="meta">01 · Luz</span>
+  </div>
+
+  <div class="num-grande">01</div>
+  <div class="ajuste-eyebrow">O que mais muda o resultado</div>
+  <h2 class="ajuste-titulo">A <em>luz</em> faz<br>quase tudo.</h2>
+  <p class="ajuste-sub">A diferença entre vídeo "de celular" e vídeo "editorial" é, em 80% dos casos, luz. Antes de pensar em câmera, microfone ou roteiro: pensa em janela.</p>
+
+  <div class="corpo">
+    <p>O olho humano vê em qualquer luz, a câmera não. Quando você grava com luz de teto direta (aquela lâmpada redonda no centro do quarto), ela vem <strong>de cima pra baixo</strong>, achata o nariz, deixa sombra escura embaixo dos olhos, e amarela a pele. É o oposto do que a gente quer pra Voz da Foto.</p>
+
+    <p>A solução é simples e gratuita: <strong>uma janela</strong>. A janela é o melhor refletor do mundo. Ela espalha a luz de forma natural, dá sombra suave no lado oposto do rosto (isso é editorial), e mantém a cor real da pele.</p>
+
+    <div class="destaque">"Grava virada pra janela, ou com a janela na lateral. Nunca de costas."</div>
+
+    <p>De costas pra janela, a câmera mede a luz forte do fundo e <strong>escurece o seu rosto</strong> automaticamente — você vira silhueta. Na lateral, você ganha o efeito Vermeer (lembra do C07?): meia luz, meia sombra, profundidade.</p>
+  </div>
+
+  <div class="esquema">
+    <div class="esquema-titulo">Posição da Isa em relação à janela</div>
+    <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- 3 cenários -->
+      <!-- CENÁRIO 1 - certo (janela na frente) -->
+      <g transform="translate(50,0)">
+        <rect x="0" y="30" width="200" height="130" fill="#FEFEFE" stroke="#282D29" stroke-width="2"/>
+        <rect x="80" y="30" width="40" height="32" fill="#F5EFE6" stroke="#B94C14" stroke-width="2"/>
+        <text x="100" y="24" font-family="Inter" font-size="12" fill="#282D29" text-anchor="middle" font-weight="600">janela</text>
+        <circle cx="100" cy="125" r="18" fill="#B94C14"/>
+        <path d="M 100 143 L 90 160 L 110 160 Z" fill="#B94C14"/>
+        <path d="M 100 65 L 100 105" stroke="#C68643" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="100" y="188" font-family="Cormorant Garamond" font-style="italic" font-size="20" fill="#B94C14" text-anchor="middle" font-weight="600">✓ Certo</text>
+      </g>
+      <!-- CENÁRIO 2 - editorial -->
+      <g transform="translate(300,0)">
+        <rect x="0" y="30" width="200" height="130" fill="#FEFEFE" stroke="#282D29" stroke-width="2"/>
+        <rect x="0" y="75" width="18" height="50" fill="#F5EFE6" stroke="#B94C14" stroke-width="2"/>
+        <text x="9" y="65" font-family="Inter" font-size="11" fill="#282D29" text-anchor="middle" font-weight="600">janela</text>
+        <circle cx="120" cy="115" r="18" fill="#B94C14"/>
+        <path d="M 120 133 L 110 155 L 130 155 Z" fill="#B94C14"/>
+        <path d="M 23 105 L 95 110" stroke="#C68643" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="100" y="188" font-family="Cormorant Garamond" font-style="italic" font-size="20" fill="#B94C14" text-anchor="middle" font-weight="600">✓ Editorial</text>
+      </g>
+      <!-- CENÁRIO 3 - silhueta -->
+      <g transform="translate(550,0)">
+        <rect x="0" y="30" width="200" height="130" fill="#FEFEFE" stroke="#282D29" stroke-width="2"/>
+        <rect x="80" y="30" width="40" height="32" fill="#F5EFE6" stroke="#282D29" stroke-width="2"/>
+        <text x="100" y="24" font-family="Inter" font-size="12" fill="#282D29" text-anchor="middle" font-weight="600">janela</text>
+        <circle cx="100" cy="115" r="18" fill="#282D29" opacity=".4"/>
+        <path d="M 100 133 L 90 155 L 110 155 Z" fill="#282D29" opacity=".4"/>
+        <line x1="30" y1="40" x2="170" y2="155" stroke="#C68643" stroke-width="3" opacity=".6"/>
+        <line x1="170" y1="40" x2="30" y2="155" stroke="#C68643" stroke-width="3" opacity=".6"/>
+        <text x="100" y="188" font-family="Cormorant Garamond" font-style="italic" font-size="20" fill="#C68643" text-anchor="middle" font-weight="600">✕ Silhueta</text>
+      </g>
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#C68643"/>
+        </marker>
+      </defs>
+    </svg>
+    <div class="esquema-legenda">À esquerda: rosto iluminado por igual. No meio: sombra editorial (o nosso jeito). À direita: o erro a evitar.</div>
+  </div>
+
+  <div class="check">
+    <div class="check-titulo">Antes de apertar REC</div>
+    <ul>
+      <li>Janela aberta ou cortina aberta, sem cortina escura</li>
+      <li>Horário entre 9h–11h ou 16h–18h (luz mais bonita do dia)</li>
+      <li>Desliga a luz de teto durante a gravação</li>
+      <li class="no">Não grava de costas pra janela — vira silhueta</li>
+      <li class="no">Não usa lâmpada amarela direto no rosto</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— a luz é a primeira decisão.</div>
+    <div class="pagenum">02</div>
+  </div>
+</div>
+
+<!-- ============================== PÁGINA 3 · ENQUADRAMENTO ============================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div>
+  <div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div>
+  <div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 3 Ajustes</span>
+    <span class="meta">02 · Enquadramento</span>
+  </div>
+
+  <div class="num-grande">02</div>
+  <div class="ajuste-eyebrow">Pare de cortar o queixo</div>
+  <h2 class="ajuste-titulo">Câmera<br><em>na altura dos olhos.</em></h2>
+  <p class="ajuste-sub">Enquadramento errado faz parecer vídeo amador, mesmo com a melhor luz. Boa notícia: é a coisa mais fácil de consertar.</p>
+
+  <div class="corpo">
+    <p>Câmera <strong>baixa</strong> (no peito, no colo) deixa o queixo proeminente, abre as narinas, e cria efeito "vídeo de FaceTime no sofá". Câmera <strong>alta</strong> demais infantiliza. O ponto certo é simples: <strong>lente na altura dos olhos</strong>.</p>
+
+    <div class="destaque">"Como se você estivesse olhando pra outra pessoa, não pra um celular."</div>
+
+    <p>Pra acertar todo dia, marca uma <strong>fita no chão</strong> onde você fica de pé (ou no banco onde senta). E uma marca na parede atrás da câmera, na altura dos seus olhos. Não precisa pensar mais — só posicionar.</p>
+
+    <p>O enquadramento ideal mostra <strong>ombros e parte do tronco</strong>, não só rosto. Rosto sozinho fecha demais, perde linguagem corporal (suas mãos contam metade da história). E deixa <strong>um palmo de "ar" acima da cabeça</strong>. Sem ar, sufoca.</p>
+  </div>
+
+  <div class="esquema">
+    <div class="esquema-titulo">3 enquadramentos lado a lado</div>
+    <svg viewBox="0 0 800 230" xmlns="http://www.w3.org/2000/svg">
+      <!-- baixo demais -->
+      <g transform="translate(40,0)">
+        <rect x="0" y="10" width="180" height="200" fill="#FEFEFE" stroke="#282D29" stroke-width="2"/>
+        <circle cx="90" cy="10" r="55" fill="#B94C14"/>
+        <rect x="55" y="55" width="70" height="155" fill="#B94C14"/>
+        <text x="90" y="225" font-family="Cormorant Garamond" font-style="italic" font-size="18" fill="#C68643" text-anchor="middle" font-weight="600">✕ Câmera baixa</text>
+      </g>
+      <!-- ideal -->
+      <g transform="translate(310,0)">
+        <rect x="0" y="10" width="180" height="200" fill="#FEFEFE" stroke="#B94C14" stroke-width="3"/>
+        <line x1="0" y1="42" x2="180" y2="42" stroke="#B94C14" stroke-width="1" stroke-dasharray="4,4" opacity=".5"/>
+        <text x="170" y="38" font-family="Inter" font-size="9" fill="#B94C14" text-anchor="end" font-weight="600">ar</text>
+        <circle cx="90" cy="85" r="32" fill="#B94C14"/>
+        <path d="M 30 165 Q 90 120 150 165 L 150 210 L 30 210 Z" fill="#B94C14"/>
+        <text x="90" y="225" font-family="Cormorant Garamond" font-style="italic" font-size="18" fill="#B94C14" text-anchor="middle" font-weight="600">✓ Ideal</text>
+      </g>
+      <!-- longe demais -->
+      <g transform="translate(580,0)">
+        <rect x="0" y="10" width="180" height="200" fill="#FEFEFE" stroke="#282D29" stroke-width="2"/>
+        <circle cx="90" cy="130" r="20" fill="#B94C14" opacity=".6"/>
+        <rect x="68" y="148" width="44" height="55" fill="#B94C14" opacity=".6"/>
+        <text x="90" y="225" font-family="Cormorant Garamond" font-style="italic" font-size="18" fill="#C68643" text-anchor="middle" font-weight="600">✕ Longe demais</text>
+      </g>
+    </svg>
+    <div class="esquema-legenda">No meio: o nosso padrão. Ombros visíveis, palmo de ar acima da cabeça, lente na altura dos olhos.</div>
+  </div>
+
+  <div class="check">
+    <div class="check-titulo">Antes de apertar REC</div>
+    <ul>
+      <li>Marca de fita no chão onde você fica</li>
+      <li>Marca na parede atrás da câmera (na altura dos seus olhos)</li>
+      <li>Confere: dá pra ver os ombros e parte do tronco</li>
+      <li>Confere: tem um palmo de ar acima da cabeça</li>
+      <li class="no">Câmera no colo ou no peito: vai cortar o queixo</li>
+      <li class="no">Câmera de cima (estilo selfie alta): infantiliza</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— olho no olho.</div>
+    <div class="pagenum">03</div>
+  </div>
+</div>
+
+<!-- ============================== PÁGINA 4 · B-ROLL ============================== -->
+<div class="page">
+  <div class="viewfinder vf-tl"></div>
+  <div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div>
+  <div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 3 Ajustes</span>
+    <span class="meta">03 · B-roll</span>
+  </div>
+
+  <div class="num-grande">03</div>
+  <div class="ajuste-eyebrow">O pulo do gato</div>
+  <h2 class="ajuste-titulo">O <em>B-roll</em><br>da foto comentada.</h2>
+  <p class="ajuste-sub">Esse é o ajuste que transforma o reel de "professora falando" em "professora mostrando". É o que separa a gente do óbvio.</p>
+
+  <div class="corpo">
+    <p>Quando você fala sobre uma foto (Dorothea Lange, Vermeer, Fan Ho) e o vídeo mostra <strong>só você falando</strong>, o espectador desliga em 4 segundos. O olho dele quer ver a foto, não você descrevendo.</p>
+
+    <p>Solução: depois de gravar a fala, <strong>grava em separado um close da tela do seu celular ou notebook</strong> com a foto aberta. Passa o dedo lentamente sobre detalhes. Dá zoom. Aponta. Como se você estivesse mostrando pra um amigo no sofá.</p>
+
+    <div class="destaque">"Eu corto aqui na edição, intercalando os dois — fala e foto, fala e foto."</div>
+
+    <p>Resultado: o reel vira <strong>uma aula visual</strong>, não um monólogo. É exatamente o que o Davi Ribas faz toda hora (e por isso funciona). É também o que o nosso manual de estilo já prevê: densidade de ~12 cortes por minuto.</p>
+
+    <p><strong>Dica de ouro:</strong> grava o B-roll em <strong>câmera lenta</strong> (botão 0.5x no celular, ou modo slo-mo). Na edição eu acelero pra velocidade certa, mas o movimento fica suave, profissional. Movimento de dedo em velocidade normal sempre parece tremido.</p>
+  </div>
+
+  <div class="esquema">
+    <div class="esquema-titulo">Como fica o reel intercalado</div>
+    <svg viewBox="0 0 800 180" xmlns="http://www.w3.org/2000/svg">
+      <!-- timeline -->
+      <line x1="40" y1="90" x2="760" y2="90" stroke="#282D29" stroke-width="1" opacity=".3"/>
+      <!-- blocos alternados -->
+      <rect x="40" y="60" width="100" height="60" fill="#B94C14"/>
+      <text x="90" y="95" font-family="Inter" font-size="12" fill="#F5EFE6" text-anchor="middle" font-weight="600">FALA</text>
+
+      <rect x="150" y="60" width="80" height="60" fill="#C68643"/>
+      <text x="190" y="95" font-family="Inter" font-size="11" fill="#F5EFE6" text-anchor="middle" font-weight="600">B-ROLL</text>
+
+      <rect x="240" y="60" width="110" height="60" fill="#B94C14"/>
+      <text x="295" y="95" font-family="Inter" font-size="12" fill="#F5EFE6" text-anchor="middle" font-weight="600">FALA</text>
+
+      <rect x="360" y="60" width="90" height="60" fill="#C68643"/>
+      <text x="405" y="95" font-family="Inter" font-size="11" fill="#F5EFE6" text-anchor="middle" font-weight="600">B-ROLL</text>
+
+      <rect x="460" y="60" width="100" height="60" fill="#B94C14"/>
+      <text x="510" y="95" font-family="Inter" font-size="12" fill="#F5EFE6" text-anchor="middle" font-weight="600">FALA</text>
+
+      <rect x="570" y="60" width="100" height="60" fill="#C68643"/>
+      <text x="620" y="95" font-family="Inter" font-size="11" fill="#F5EFE6" text-anchor="middle" font-weight="600">B-ROLL</text>
+
+      <rect x="680" y="60" width="80" height="60" fill="#B94C14"/>
+      <text x="720" y="95" font-family="Inter" font-size="12" fill="#F5EFE6" text-anchor="middle" font-weight="600">FALA</text>
+
+      <text x="40" y="40" font-family="Inter" font-size="12" fill="#282D29" font-weight="600">0s</text>
+      <text x="760" y="40" font-family="Inter" font-size="12" fill="#282D29" text-anchor="end" font-weight="600">45s</text>
+      <text x="400" y="155" font-family="Cormorant Garamond" font-style="italic" font-size="18" fill="#282D29" text-anchor="middle" opacity=".75">7 cortes em 45s · ~12 cortes/minuto · padrão da casa</text>
+    </svg>
+  </div>
+
+  <div class="check">
+    <div class="check-titulo">Pra cada vídeo, grava sempre os 2 lados</div>
+    <ul>
+      <li><strong>Take A — fala:</strong> você no enquadramento da página 03, contando sobre a foto</li>
+      <li><strong>Take B — B-roll:</strong> close da tela com a foto aberta, dedo passando devagar</li>
+      <li>Grava o B-roll em <strong>câmera lenta</strong> (slo-mo / 0.5x)</li>
+      <li>Pode gravar várias passagens do mesmo trecho — quanto mais opção, melhor</li>
+      <li class="no">Não precisa cortar nada: manda bruto pra mim</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · maio 2026</div>
+    <div class="stamp">— mostrar, não descrever.</div>
+    <div class="pagenum">04</div>
+  </div>
+</div>
+
+<!-- ============================== PÁGINA 5 · RESUMO ============================== -->
+<div class="page final">
+  <div class="viewfinder vf-tl"></div>
+  <div class="viewfinder vf-tr"></div>
+  <div class="viewfinder vf-bl"></div>
+  <div class="viewfinder vf-br"></div>
+
+  <div class="header">
+    <span class="brand">A Voz da Foto · 3 Ajustes</span>
+    <span class="meta">Resumo · Antes de gravar</span>
+  </div>
+
+  <div class="ajuste-eyebrow">Imprime ou salva como wallpaper</div>
+  <h1>Os três,<br><em>num olhar.</em></h1>
+  <p class="ajuste-sub">Antes de cada gravação, passa o olho aqui. Em 60 segundos você confere se está tudo no lugar.</p>
+
+  <div class="resumo">
+    <div class="card">
+      <div class="n">01</div>
+      <h3>Luz <em>natural</em></h3>
+      <p>Janela na frente ou na lateral. Nunca de costas. Horário 9h–11h ou 16h–18h. Desliga luz de teto.</p>
+    </div>
+    <div class="card">
+      <div class="n">02</div>
+      <h3>Câmera <em>nos olhos</em></h3>
+      <p>Lente na altura dos seus olhos. Ombros enquadrados. Palmo de ar acima da cabeça. Marca fita no chão.</p>
+    </div>
+    <div class="card">
+      <div class="n">03</div>
+      <h3>B-roll <em>da foto</em></h3>
+      <p>Depois da fala, grava close da tela com a foto. Dedo passando devagar, em câmera lenta (slo-mo / 0.5x).</p>
+    </div>
+  </div>
+
+  <div class="check" style="margin-top:50px;">
+    <div class="check-titulo">Checklist final · 6 itens antes do REC</div>
+    <ul>
+      <li>Janela aberta, luz de teto desligada</li>
+      <li>Câmera na altura dos olhos, fita marcada no chão</li>
+      <li>Enquadramento: ombros visíveis, palmo de ar acima</li>
+      <li>Celular/notebook com a foto aberta, pronto pro B-roll</li>
+      <li>Modo slo-mo ligado pro Take B</li>
+      <li>Manda tudo bruto pro Leandro — sem cortar nada</li>
+    </ul>
+  </div>
+
+  <div class="assinatura">
+    <div class="assinatura-label">Última coisa</div>
+    <p>Não tenta acertar tudo de uma vez. Escolhe <em>um</em> ajuste por semana. Na semana 1, só a luz. Na 2, luz + enquadramento. Na 3, os três juntos. <em>Frequência vence perfeição.</em></p>
+  </div>
+
+  <div class="footer">
+    <div class="footer-left">A Voz da Foto · vozdafoto.com.br</div>
+    <div class="stamp">— ler é decidir.</div>
+    <div class="pagenum">05</div>
+  </div>
+</div>
+
+</body>
+</html>
